@@ -139,14 +139,13 @@ const UserManagement = () => {
         </Button>
       </Box>
 
-      {/* User List */}
       <Paper elevation={3} sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>
           Users ({users.length})
         </Typography>
         {users.length === 0 ? (
           <Typography color="textSecondary" align="center">
-            No users found. Add some users using the button above.
+            No users found.
           </Typography>
         ) : (
           <List>
@@ -243,7 +242,6 @@ const UserManagement = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

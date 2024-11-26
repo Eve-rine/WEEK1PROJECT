@@ -171,7 +171,6 @@ const UserManagement = () => {
                     </>
                   }
                 />
-                <ListItemSecondaryAction>
                   <IconButton 
                     edge="end" 
                     aria-label="edit"
@@ -180,14 +179,6 @@ const UserManagement = () => {
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton 
-                    edge="end" 
-                    aria-label="delete"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>

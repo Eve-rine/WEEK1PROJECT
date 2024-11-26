@@ -8,7 +8,6 @@ This is a comprehensive User Management application built with React and Materia
 
 - 🆕 Add new users with a modal form
 - ✏️ Edit existing user details
-- 🗑️ Delete users with confirmation
 - 📝 Form validation for user inputs
 - 🚨 Snackbar notifications for user actions
 - 📱 Responsive design using Material-UI Grid system
@@ -68,7 +67,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 src/
 │
 ├── components/
-│   └── Users.js   # Main application component
+│   └── UserManagement.jsx   # Main application component
 │
 ├── App.js                  # Root application component
 └── index.js                # Entry point
@@ -104,7 +103,6 @@ The application includes robust form validation:
 Snackbar notifications will appear for:
 - Successfully adding a user
 - Successfully updating a user
-- Successfully deleting a user
 
 ## Responsive Design
 
@@ -114,4 +112,4 @@ The application is fully responsive and works well on:
 - Mobile devices
 
 
-Project Link: [https://github.com/your-username/user-management-app](https://github.com/your-username/user-management-app)
+Project Link: [https://github.com/Eve-rine/WEEK1PROJECT]

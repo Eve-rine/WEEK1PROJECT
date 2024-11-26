@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import PropTypes from 'prop-types';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -257,6 +258,19 @@ const UserManagement = () => {
       </Snackbar>
     </Container>
   );
+};
+
+UserManagement.propTypes = {
+  initialUsers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+    })
+  ),
+  onUserUpdate: PropTypes.func,
+  containerWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
 };
 
 export default UserManagement;

@@ -22,8 +22,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
 
-const UserManagement = () => {
-  const [users, setUsers] = useState([]);
+const UserManagement = ({ initialUsers = [], onUserUpdate, containerWidth = "md" }) => {
+  const [users, setUsers] = useState(initialUsers);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,12 +38,18 @@ const UserManagement = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  React.useEffect(() => {
+    if (onUserUpdate) {
+      onUserUpdate(users);
+    }
+  }, [users, onUserUpdate]);
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
-    
+
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
@@ -54,12 +60,12 @@ const UserManagement = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     if (editingId !== null) {
-      setUsers(users.map(user => 
-        user.id === editingId 
+      setUsers(users.map(user =>
+        user.id === editingId
           ? { ...formData, id: editingId }
           : user
       ));
@@ -120,15 +126,15 @@ const UserManagement = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth={containerWidth} sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         User Management
       </Typography>
 
-      <Box sx={{ mb: 2 }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          variant="contained"
+          color="primary"
           startIcon={<AddIcon />}
           onClick={() => {
             setFormData({ name: '', email: '', phone: '' });
@@ -160,22 +166,22 @@ const UserManagement = () => {
                     </>
                   }
                 />
-                  <IconButton 
-                    edge="end" 
-                    aria-label="edit"
-                    onClick={() => handleEdit(user)}
-                    sx={{ mr: 1 }}
-                  >
-                    <EditIcon />
-                  </IconButton>
+                <IconButton
+                  edge="end"
+                  aria-label="edit"
+                  onClick={() => handleEdit(user)}
+                  sx={{ mr: 1 }}
+                >
+                  <EditIcon />
+                </IconButton>
               </ListItem>
             ))}
           </List>
         )}
       </Paper>
 
-      <Dialog 
-        open={isModalOpen} 
+      <Dialog
+        open={isModalOpen}
         onClose={handleCloseModal}
         maxWidth="sm"
         fullWidth
@@ -227,15 +233,15 @@ const UserManagement = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={handleCloseModal} 
+          <Button
+            onClick={handleCloseModal}
             color="secondary"
           >
             Cancel
           </Button>
-          <Button 
-            onClick={handleSubmit} 
-            color="primary" 
+          <Button
+            onClick={handleSubmit}
+            color="primary"
             variant="contained"
           >
             {editingId !== null ? 'Update User' : 'Add User'}
@@ -248,8 +254,8 @@ const UserManagement = () => {
         autoHideDuration={6000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <Alert 
-          onClose={() => setSnackbar({ ...snackbar, open: false })} 
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >

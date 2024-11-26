@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
   IconButton,
   Snackbar,
   Alert,
@@ -19,7 +18,6 @@ import {
   DialogContent,
   DialogActions
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -97,15 +95,6 @@ const UserManagement = () => {
     });
     setEditingId(user.id);
     setIsModalOpen(true);
-  };
-
-  const handleDelete = (userId) => {
-    setUsers(users.filter(user => user.id !== userId));
-    setSnackbar({
-      open: true,
-      message: 'User deleted successfully!',
-      severity: 'success'
-    });
   };
 
   const handleChange = (e) => {

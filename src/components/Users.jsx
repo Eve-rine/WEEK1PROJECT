@@ -13,10 +13,15 @@ import {
   Snackbar,
   Alert,
   Box,
-  Grid
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -32,6 +37,7 @@ const UserManagement = () => {
     message: '',
     severity: 'success'
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -39,7 +45,6 @@ const UserManagement = () => {
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.phone.trim()) newErrors.phone = 'Phone is required';
     
-    // Basic email validation
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
@@ -54,7 +59,6 @@ const UserManagement = () => {
     if (!validateForm()) return;
 
     if (editingId !== null) {
-      // Update existing user
       setUsers(users.map(user => 
         user.id === editingId 
           ? { ...formData, id: editingId }
@@ -66,12 +70,11 @@ const UserManagement = () => {
         severity: 'success'
       });
     } else {
-      // Add new user
       setUsers([
         ...users,
         {
           ...formData,
-          id: Date.now() // Simple way to generate unique id
+          id: Date.now()
         }
       ]);
       setSnackbar({
@@ -81,9 +84,9 @@ const UserManagement = () => {
       });
     }
 
-    // Reset form
     setFormData({ name: '', email: '', phone: '' });
     setEditingId(null);
+    setIsModalOpen(false);
   };
 
   const handleEdit = (user) => {
@@ -93,6 +96,7 @@ const UserManagement = () => {
       phone: user.phone
     });
     setEditingId(user.id);
+    setIsModalOpen(true);
   };
 
   const handleDelete = (userId) => {
@@ -110,7 +114,6 @@ const UserManagement = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -119,83 +122,33 @@ const UserManagement = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setFormData({ name: '', email: '', phone: '' });
+    setEditingId(null);
+    setErrors({});
+  };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         User Management
       </Typography>
 
-      {/* Form */}
-      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                {editingId !== null ? 'Edit User' : 'Add New User'}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="name"
-                label="Name"
-                value={formData.name}
-                onChange={handleChange}
-                error={!!errors.name}
-                helperText={errors.name}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={!!errors.email}
-                helperText={errors.email}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="phone"
-                label="Phone"
-                value={formData.phone}
-                onChange={handleChange}
-                error={!!errors.phone}
-                helperText={errors.phone}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  {editingId !== null ? 'Update User' : 'Add User'}
-                </Button>
-                {editingId !== null && (
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setFormData({ name: '', email: '', phone: '' });
-                      setEditingId(null);
-                    }}
-                  >
-                    Cancel Edit
-                  </Button>
-                )}
-              </Box>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
+      <Box sx={{ mb: 2 }}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          startIcon={<AddIcon />}
+          onClick={() => {
+            setFormData({ name: '', email: '', phone: '' });
+            setEditingId(null);
+            setIsModalOpen(true);
+          }}
+        >
+          Add New User
+        </Button>
+      </Box>
 
       {/* User List */}
       <Paper elevation={3} sx={{ p: 3 }}>
@@ -204,7 +157,7 @@ const UserManagement = () => {
         </Typography>
         {users.length === 0 ? (
           <Typography color="textSecondary" align="center">
-            No users found. Add some users using the form above.
+            No users found. Add some users using the button above.
           </Typography>
         ) : (
           <List>
@@ -240,6 +193,75 @@ const UserManagement = () => {
           </List>
         )}
       </Paper>
+
+      <Dialog 
+        open={isModalOpen} 
+        onClose={handleCloseModal}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {editingId !== null ? 'Edit User' : 'Add New User'}
+        </DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2} sx={{ pt: 1 }}>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  label="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!errors.email}
+                  helperText={errors.email}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="phone"
+                  label="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  error={!!errors.phone}
+                  helperText={errors.phone}
+                  fullWidth
+                  required
+                />
+              </Grid>
+            </Grid>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={handleCloseModal} 
+            color="secondary"
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleSubmit} 
+            color="primary" 
+            variant="contained"
+          >
+            {editingId !== null ? 'Update User' : 'Add User'}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Snackbar for notifications */}
       <Snackbar

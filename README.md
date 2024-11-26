@@ -64,13 +64,22 @@ It correctly bundles React in production mode and optimizes the build for the be
 ## Application Structure
 
 ```
+## Application Structure
+
 src/
 │
 ├── components/
-│   └── UserManagement.jsx   # Main application component
+│   └── UserManagement/
+│       ├── UserManagement.jsx   # Main container component
+│       │   ├── Header          # Title section
+│       │   ├── AddUserButton   # New user button
+│       │   ├── UsersList       # List of users
+│       │   │   └── UserListItem # Individual user entry
+│       │   ├── UserFormDialog  # Add/Edit modal
+│       │   └── Notifications   # Snackbar alerts
 │
-├── App.js                  # Root application component
-└── index.js                # Entry point
+├── App.js                      # Root component
+└── index.js                    # Entry point
 ```
 
 ## Usage
@@ -112,4 +121,4 @@ The application is fully responsive and works well on:
 - Mobile devices
 
 
-Project Link: [https://github.com/Eve-rine/WEEK1PROJECT]
+Project Link: 'https://github.com/Eve-rine/WEEK1PROJECT'
